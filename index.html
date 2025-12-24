@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask Her Out ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      overflow: hidden;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0.5rem 1rem 3rem rgba(0,0,0,0.3);
+      animation: pop 0.6s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      margin: 20px 0 15px;
+      color: #ff2f68;
+      font-size: 1.8em;
+    }
+
+    p {
+      color: #555;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .btn {
+      position: relative;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .btn a {
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      background: #fff;
+      color: #111;
+      box-shadow: 0.3rem 0.6rem 2rem rgba(0,0,0,0.2);
+      position: absolute;
+      transition: all 0.3s ease;
+      user-select: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .yes {
+      left: 20px;
+      background: #ff2f68;
+      color: #fff;
+    }
+
+    .yes:hover {
+      transform: scale(1.1);
+    }
+
+    .no {
+      right: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 12px;
+      height: 12px;
+      animation: fall linear infinite;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+      }
+    }
+
+    .gif {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page 1 -->
+  <div class="container" id="page1">
+    <div class="gif">
+      <div class="tenor-gif-embed" data-postid="253027946666209433" data-share-method="host" data-aspect-ratio="1.3" data-width="100%"></div>
+    </div>
+    <script async src="https://tenor.com/embed.js"></script>
+
+    <h1>Will you be my girlfriend? 🥰</h1>
+    <p>Soch lo ache se, it's a big decision 😌</p>
+
+    <div class="btn">
+      <a class="yes" id="yesToPage2">Yes ❤️</a>
+      <a class="no" id="noBtn1">No 😅</a>
+    </div>
+  </div>
+
+  <!-- Page 2 (final success page) -->
+  <div class="container hidden" id="page2">
+    <div class="gif">
+      <div class="tenor-gif-embed" data-postid="17385899" data-share-method="host" data-aspect-ratio="1.0" data-width="100%"></div>
+    </div>
+    <script async src="https://tenor.com/embed.js"></script>
+
+    <h1>Yayyy! I knew you'd say yes! 😍❤️</h1>
+    <p>Thank you for making me the happiest person alive!<br>Love you so much meri jaan 💕💕</p>
+    <p>Can't wait for all our adventures together 🥰</p>
+  </div>
+
+  <script>
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+    
+    const noBtn1 = document.getElementById("noBtn1");
+    const yesToPage2 = document.getElementById("yesToPage2");
+
+    let stage = 0;
+    let yesScale = 1;
+
+    const messages = [
+      { title: "Are you sure? Think again na 🥺", text: "Itni jaldi no mat bolo 😭" },
+      { title: "One more chance please 🙏", text: "Baby please man jao na 💔" },
+      { title: "Last time, pakka soch lo 😢", text: "Dil toot jaayega mera 😭" },
+      { title: "Ab to haan bol do na 🥹", text: "Please meri pyari girlfriend ban jao ❤️" }
+    ];
+
+    function moveNo(elm) {
+      const container = elm.parentElement;
+      const maxX = container.offsetWidth - elm.offsetWidth - 40;
+      const maxY = container.offsetHeight - elm.offsetHeight - 100;
+      
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+      
+      elm.style.position = "relative";
+      elm.style.left = `${randomX}px`;
+      elm.style.top = `${randomY}px`;
+
+      yesScale += 0.2;
+      yesToPage2.style.transform = `scale(${yesScale})`;
+    }
+
+    noBtn1.addEventListener("mouseenter", () => moveNo(noBtn1));
+    noBtn1.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      moveNo(noBtn1);
+    });
+    noBtn1.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (stage < messages.length) {
+        page1.querySelector("h1").textContent = messages[stage].title;
+        page1.querySelector("p").textContent = messages[stage].text;
+        stage++;
+      }
+      moveNo(noBtn1);
+    });
+
+    yesToPage2.addEventListener("click", () => {
+      page1.classList.add("hidden");
+      page2.classList.remove("hidden");
+      createConfetti();
+    });
+
+    function createConfetti() {
+      const colors = ["#ff2f68", "#ffcc00", "#00c9a7", "#845ec2", "#ff6b6b"];
+      for (let i = 0; i < 100; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDuration = (Math.random() * 3 + 3) + "s";
+        c.style.animationDelay = Math.random() * 2 + "s";
+        document.body.appendChild(c);
+
+        // Remove after animation
+        setTimeout(() => c.remove(), 8000);
+      }
+    }
+  </script>
+
+</body>
+</html>
